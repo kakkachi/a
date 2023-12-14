@@ -1,0 +1,15 @@
+import pandas as pd
+
+df=pd.read_csv("student_data.csv")
+print(df)
+print("===================================")
+print( df[df['Age']>19] )
+print("===================================")
+print("Mean of GPA is : ", df['GPA'].mean())
+print("===================================")
+df2=df.sort_values(by=['GPA'], ascending=False)
+print(df2)
+print("===================================")
+df3=df.groupby('Age')['GPA'].mean()
+print(df3)
+

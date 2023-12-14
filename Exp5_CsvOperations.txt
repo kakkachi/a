@@ -1,0 +1,7 @@
+import pandas as pd
+
+df=pd.read_csv("p.csv")
+print(df)
+print("Rows : ", len(df))
+print("Columns : ", len(df.columns))
+print("Total Revenue : ", sum(df['Revenue']))

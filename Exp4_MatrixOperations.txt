@@ -1,0 +1,31 @@
+import numpy as np
+import scipy
+from scipy.linalg import svd
+
+matrix_A = np.array([[1, 2, 3],
+                     [4, 5, 6],
+                     [7, 8, 9]])
+matrix_B = np.array([[9, 8, 7],
+                     [6, 5, 4],
+                     [3, 2, 1]])
+
+print("Sum is : ", matrix_A+matrix_B)
+print("Product is : ", matrix_A*matrix_B)
+print("Dot product is :", np.dot(matrix_A,matrix_B))
+print(("Transpose is :", np.transpose(matrix_A)))
+print("Determinant is :", np.linalg.det(matrix_A))
+eigenV, eigenVc= np.linalg.eig(matrix_A)
+print("Eigen Val :", eigenV)
+print("Eigen Vect : ", eigenVc)
+
+#    U: The left singular vectors matrix.
+#    S: The singular values as a 1-D array.
+#    T: The transpose of the right singular vectors matrix.
+
+U,S,T= svd(matrix_A)
+print("======================================")
+print(U)
+print("======================================")
+print(S)
+print("======================================")
+print(T)

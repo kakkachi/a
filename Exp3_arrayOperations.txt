@@ -1,0 +1,8 @@
+import numpy as np
+
+grades = np.array([85, 90, 78, 92, 88, 76, 95, 89, 84, 91])
+
+print("Average is :", np.mean(grades))
+grade_filtered = grades[grades>90]
+print("No. of Students is :", len(grade_filtered))
+print("Standard Dev is :", np.std(grades))

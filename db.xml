@@ -1,0 +1,102 @@
+DBHELPER
+package com.example.androiddb;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import androidx.annotation.Nullable;
+public class DbHelper extends SQLiteOpenHelper {
+    public DbHelper(@Nullable Context context) {
+        super(context, "student.db", null, 1);
+    }
+    @Override
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        sqLiteDatabase.execSQL("create table tbl_class(Name varchar(10),Roll int,Address varchar(10))");
+    }
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    }
+}
+JAVA
+package com.example.androiddb;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+public class MainActivity extends AppCompatActivity {
+    EditText name,roll,address;
+    DbHelper helper = new DbHelper(this);
+    SQLiteDatabase db;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        db=helper.getReadableDatabase();
+        db=helper.getWritableDatabase();
+        name=findViewById(R.id.name);
+        roll=findViewById(R.id.rollno);
+        address=findViewById(R.id.address);
+    }
+    public void insertDb(View view) {
+        String na=name.getText().toString();
+        String ro=roll.getText().toString();
+        String ad=address.getText().toString();
+        if(na.equals("")){
+            Toast.makeText(this, "Enter all field", Toast.LENGTH_SHORT).show();
+        }else{
+            ContentValues data = new ContentValues();
+            data.put("Name",na);
+            data.put("Roll",ro);
+            data.put("Address",ad);
+            db.insert("tbl_class",null,data);
+            Toast.makeText(this, "Inserted data to db", Toast.LENGTH_SHORT).show();
+        }
+    }
+    public void readDb(View view) {
+        StringBuffer buffer = new StringBuffer();
+        Cursor c = db.rawQuery("select * from tbl_class",null);
+        while(c.moveToNext()){
+            buffer.append("Name : "+c.getString(0)+"\n");
+            buffer.append("Roll : "+c.getString(1)+"\n");
+            buffer.append("Address : "+c.getString(2)+"\n\n");
+        }
+        Toast.makeText(this,buffer.toString(), Toast.LENGTH_LONG).show();
+    }
+    public void updateDb(View view) {
+        String na=name.getText().toString();
+        String ro=roll.getText().toString();
+        String ad=address.getText().toString();
+        if(na.equals("")){
+            Toast.makeText(this, "Enter all field", Toast.LENGTH_SHORT).show();
+        }else{
+            try{
+                ContentValues data = new ContentValues();
+                data.put("Name",na);
+                data.put("Roll",ro);
+                data.put("Address",ad);
+                db.update("tbl_class",data,"Roll="+ro,null);
+                Toast.makeText(this, "updated data to db", Toast.LENGTH_SHORT).show();
+            }catch(Exception e){
+            }
+        }
+    }
+    public void deleteDb(View view) {
+        String ro=roll.getText().toString();
+        if(ro.equals("")){
+            Toast.makeText(this, "Enter all field", Toast.LENGTH_SHORT).show();
+        }else{
+            try {
+                ContentValues data = new ContentValues();
+                data.put("Roll",ro);
+                db.delete("tbl_class","Roll="+ro,null);
+                Toast.makeText(this, "Deleted data from db", Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
+            }
+        }
+    }
+}
